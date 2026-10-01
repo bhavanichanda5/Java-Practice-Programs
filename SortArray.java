@@ -29,7 +29,9 @@ public class SortArray {
         return arr;
     }
 
+    public static void mergeSort(){
 
+    }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
