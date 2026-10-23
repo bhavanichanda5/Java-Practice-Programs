@@ -1,6 +1,6 @@
 The Java Collections Framework (JCF) is a unified architecture in Java composed of a set of built-in interfaces, classes, and algorithms designed to store, manage, and manipulate groups of objects efficiently. Located in the java.util package, it serves as a pre-built "data structure toolbox" so developers do not have to write custom logic for standard operations like dynamic resizing, sorting, or searching.
 
-
+=======================================================
 
 Key Technical Differences
 
@@ -19,3 +19,35 @@ Key Technical Differences
 If you require thread safety in a multi-threaded system, utilizing Vector is still generally discouraged today. Instead, developers use modern concurrency utilities:
 • For read-heavy operations with low writing frequency, use java.util.concurrent.CopyOnWriteArrayList.
 • To quickly turn an existing ArrayList thread-safe, wrap it via Collections.synchronizedList().
+
+
+====================================================
+
+
+Why, When, and How to Use ArrayDeque Instead of Stack
+
+Java developers are strongly encouraged to use ArrayDeque instead of Stack for LIFO (Last-In, First-Out) operations.
+
+1. Why we need to use ArrayDeque over Stack
+
+The java.util.Stack class is a legacy class introduced in Java 1.0. It is considered an architectural mistake in Java for two main reasons:
+1. Unnecessary Synchronization Overhead: Stack extends Vector, meaning every single method (push, pop, peek) is synchronized using internal locks. If you are working in a single-threaded environment (which is 99% of standard stack operations), this synchronization introduces a massive, unnecessary performance penalty. ArrayDeque is not synchronized and is significantly faster.
+2. Broken Object-Oriented Design: Because Stack inherits from Vector, it accidentally exposes methods that a stack should never have. For example, you can call stack.add(0, "Element") or stack.remove(5). This violates the basic principle of a Stack, which should only allow you to interact with the top element. ArrayDeque forces you to use strict Double-Ended Queue principles.
+
+2. When we need to use ArrayDeque
+
+You should choose ArrayDeque whenever you need:
+• A Stack (LIFO): Simulating Undo/Redo operations, parsing syntax/brackets, or tracking history.
+• A Queue (FIFO): Simulating a waiting line or implementing Breadth-First Search (BFS) algorithms.
+• Single-threaded performance: High-performance, local data structures where thread-safety is handled elsewhere or not needed.
+Note: If you genuinely need a thread-safe stack across multiple threads, do not use Stack. Instead, use LinkedBlockingDeque or wrap your deque using Collections.synchronizedDeque().
+
+3. How to use ArrayDeque as a Stack
+
+To use ArrayDeque as a stack, you map the old Stack methods to their Deque equivalents.
+
+Stack Action	    Legacy Stack Method	        Modern ArrayDeque Method
+Add item to top	            push(e)	                            push(e)
+Remove item from top	pop()	                                    pop()
+View item at top	            peek()	                                peek() or peekFirst()
+Check if empty              	empty()                                 	isEmpty()

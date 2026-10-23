@@ -3,7 +3,7 @@ package CollectionsFramework.Collection.List;
 import java.util.Stack;
 
 public class StackExample {
-    //Stack Class extends Vector Class.   it follows Last In First Out (LIFO) order...
+    //Stack Class extends Vector Class.   it follows LIFO (Last-In, First-Out) order...
 
     public static void main(String[] args) {
         Stack<Integer> st = new Stack<>();
