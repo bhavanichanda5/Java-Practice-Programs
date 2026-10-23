@@ -1,1 +1,21 @@
 The Java Collections Framework (JCF) is a unified architecture in Java composed of a set of built-in interfaces, classes, and algorithms designed to store, manage, and manipulate groups of objects efficiently. Located in the java.util package, it serves as a pre-built "data structure toolbox" so developers do not have to write custom logic for standard operations like dynamic resizing, sorting, or searching.
+
+
+
+Key Technical Differences
+
+1. Synchronization and Performance
+
+• Vector synchronizes almost every individual operation (add(), get(), remove(), etc.). This means if multiple threads try to access it, they must wait in a queue for object locks, introducing massive performance overhead.
+• ArrayList does not implement synchronization. Because it avoids thread-locking delays, it executes much faster in single-threaded environments.
+
+2. Memory Growth Footprint
+
+• When an ArrayList fills up, its backing array grows dynamically by 50% of its original size (New Capacity = Current Capacity * 1.5).
+• When a Vector fills up, it doubles its backing array size (100% increase). While this means Vector triggers fewer resizes during massive insertions, it wastes significantly more memory if the list stops expanding right after a resize event.
+
+3. Modern Multi-Threaded Alternatives
+
+If you require thread safety in a multi-threaded system, utilizing Vector is still generally discouraged today. Instead, developers use modern concurrency utilities:
+• For read-heavy operations with low writing frequency, use java.util.concurrent.CopyOnWriteArrayList.
+• To quickly turn an existing ArrayList thread-safe, wrap it via Collections.synchronizedList().
